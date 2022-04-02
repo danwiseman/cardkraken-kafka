@@ -2,6 +2,7 @@ package com.github.danwiseman.cardkraken.kafka.streams;
 
 import com.github.danwiseman.cardkraken.kafka.streams.model.CommanderCardsStats;
 import com.github.danwiseman.cardkraken.kafka.streams.model.CommanderDeck;
+import com.github.f4b6a3.uuid.UuidCreator;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
@@ -31,7 +32,7 @@ public class CommanderCardCountsStream {
 
         KTable<String, CommanderCardsStats> commanderCardCounts = commanderDecksInput
                 .selectKey((oldKey, newKey) -> generateCommanderKey(newKey.getCommanders()))
-                .mapValues((deck) -> new CommanderCardsStats(generateCommanderKey(deck.getCommanders()).toString(), "", deck.getCards()))
+                .mapValues((deck) -> new CommanderCardsStats(generateCommanderKey(deck.getCommanders()).toString(), UuidCreator.getNameBasedSha1(generateCommanderKey(deck.getCommanders()).toString()).toString(), deck.getCards()))
                 .groupByKey(Grouped.with(Serdes.String(), CustomSerdes.CommanderCardsStats()))
                 .reduce((deck1, deck2) -> {
                     deck1.addCards(deck2.getCard_counts());
