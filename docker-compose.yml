@@ -5,3 +5,7 @@ services:
     environment:
       - APPLICATION_ID_CONFIG=commander_count_stream_app
       - BOOTSTRAP_SERVERS_CONFIG=kafka1:9092
+  commander_count_consumer:
+    image: "commander_count_consumer"
+    environment:
+      - BOOTSTRAP_SERVERS_CONFIG=kafka1:9092
