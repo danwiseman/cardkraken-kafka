@@ -1,0 +1,7 @@
+version: '3.3'
+services:
+  commander_count_streams:
+    image: "commander_count_stream"
+    environment:
+      - APPLICATION_ID_CONFIG=commander_count_stream_app
+      - BOOTSTRAP_SERVERS_CONFIG=kafka1:9092

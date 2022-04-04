@@ -27,12 +27,6 @@ public final class CustomSerdes {
     );
     return Serdes.serdeFrom(serializer, deserializer);
   }
-  /*
-    public static Serde<GenreCount> GenreCount() {
-        JsonSerializer<GenreCount> serializer = new JsonSerializer<>();
-        JsonDeserializer<GenreCount> deserializer = new JsonDeserializer<>(GenreCount.class);
-        return Serdes.serdeFrom(serializer, deserializer);
-    }
-*/
+
 
 }
