@@ -58,6 +58,12 @@
             <version>4.6.1</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver-sync</artifactId>
+            <version>4.5.1</version>
+        </dependency>
+
     </dependencies>
 
     <properties>
@@ -65,7 +71,7 @@
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
 
-    <build>
+<!--    <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -96,6 +102,49 @@
                 </executions>
             </plugin>
         </plugins>
+    </build>-->
+
+    <build>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-shade-plugin</artifactId>
+            <version>2.4.1</version>
+            <executions>
+                <execution>
+                    <id>build-first</id>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>shade</goal>
+                    </goals>
+                    <configuration>
+                        <transformers>
+                            <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                <mainClass>com.github.danwiseman.cardkraken.kafka.streams.CommanderCardCountsStream</mainClass>
+                            </transformer>
+                        </transformers>
+                        <finalName>commander-card-counts-streams-${version}</finalName>
+                    </configuration>
+                </execution>
+                <execution>
+                    <id>build-second</id>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>shade</goal>
+                    </goals>
+                    <configuration>
+                        <transformers>
+                            <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                <mainClass>com.github.danwiseman.cardkraken.kafka.consumers.CommanderCardCountsConsumer</mainClass>
+                            </transformer>
+                        </transformers>
+                        <finalName>commander-card-counts-consumer-${version}</finalName>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+
+    </plugins>
     </build>
 
     <repositories>
