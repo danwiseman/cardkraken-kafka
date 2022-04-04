@@ -50,6 +50,16 @@ to create a count of how often the cards appear in commander decks with that spe
 }
 ```
 
+# :whale: Docker
+
+First build each image, then run docker compose.
+
+```dockerfile
+docker build -t commander_count_stream --target commander_count_stream .
+docker build -t commander_count_consumer --target commander_count_consumer .
+
+docker-compose -f docker-compose.yml up -d
+```
 
 Thanks :pray: to Arturo for this article and the serialization of POJOs: 
 [JSON Serializers for POJOs](https://medium.com/@agvillamizar/implementing-custom-serdes-for-java-objects-using-json-serializer-and-deserializer-in-kafka-streams-d794b66e7c03)
