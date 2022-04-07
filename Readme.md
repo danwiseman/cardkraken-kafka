@@ -25,6 +25,9 @@ to create a count of how often the cards appear in commander decks with that spe
   ],
   "commanders": [
     "General Tazri"
+  ],
+  "commander_uuids": [
+    "f52640f5-94d1-581d-b31d-ebc70597560e"
   ]
 }
 ```
@@ -32,8 +35,12 @@ to create a count of how often the cards appear in commander decks with that spe
 :point_left: Output KTable:
 ```json
 {
-  "commander_name": "[General Tazri]",
-  "commander_uuid": "f52640f5-94d1-581d-b31d-ebc70597560e",
+  "commanders": [
+    "General Tazri"
+  ],
+  "commander_uuids": [
+    "f52640f5-94d1-581d-b31d-ebc70597560e"
+  ],
   "card_counts": [
     {
       "id": "6a28dd88-db90-4f02-8aa9-39051d2c4763",
