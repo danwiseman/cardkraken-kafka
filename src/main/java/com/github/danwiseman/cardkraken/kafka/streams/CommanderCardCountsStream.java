@@ -1,5 +1,6 @@
 package com.github.danwiseman.cardkraken.kafka.streams;
 
+import com.github.danwiseman.cardkraken.kafka.consumers.CommanderCardCountsConsumer;
 import com.github.danwiseman.cardkraken.kafka.streams.model.CommanderCardsStats;
 import com.github.danwiseman.cardkraken.kafka.streams.model.CommanderDeck;
 import com.github.danwiseman.cardkraken.kafka.streams.utils.EnvTools;
@@ -10,11 +11,15 @@ import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Properties;
 
 public class CommanderCardCountsStream {
+
+    private static final Logger log = LoggerFactory.getLogger(CommanderCardCountsStream.class);
 
     public static void main(String[] args) {
 
@@ -34,14 +39,15 @@ public class CommanderCardCountsStream {
 
 
         KTable<String, CommanderCardsStats> commanderCardCounts = commanderDecksInput
-                .selectKey((oldKey, newKey) -> generateCommanderKey(newKey.getCommanders()))
-                .mapValues((deck) -> new CommanderCardsStats(generateCommanderKey(deck.getCommanders()).toString(), UuidCreator.getNameBasedSha1(generateCommanderKey(deck.getCommanders()).toString()).toString(), deck.getCards()))
+                .selectKey((oldKey, newKey) -> generateCommanderCountUUID(newKey.getCommanders_uuids(), newKey.getCommanders()))
+                .mapValues((deck) -> new CommanderCardsStats(deck.getCommanders(), deck.getCommanders_uuids(), generateCommanderCountUUID(deck.getCommanders_uuids(), deck.getCommanders()), deck.getCards()))
                 .groupByKey(Grouped.with(Serdes.String(), CustomSerdes.CommanderCardsStats()))
                 .reduce((deck1, deck2) -> {
                     deck1.addCards(deck2.getCard_counts());
                     CommanderCardsStats aggDeck = new CommanderCardsStats(
-                            deck1.getCommander_name(),
-                            deck1.getCommander_uuid(),
+                            deck1.getCommanders(),
+                            deck1.getCommander_uuids(),
+                            deck1.getStats_id(),
                             deck1.getCard_counts()
                     );
                     return aggDeck;
@@ -58,6 +64,17 @@ public class CommanderCardCountsStream {
 
     }
 
+    private static String generateCommanderCountUUID(List<String> commanders_uuids, List<String> commanders) {
+        log.error(commanders_uuids.toString());
+        if (commanders_uuids.size() == 1) {
+            return (commanders_uuids.get(0).equals(" ")) ?
+                    UuidCreator.getNameBasedSha1(generateCommanderKey(commanders)).toString()
+                    : commanders_uuids.get(0);
+        } else {
+            return UuidCreator.getNameBasedSha1(generateCommanderKey(commanders_uuids)).toString();
+        }
+    }
+
     private static Properties createProperties() {
         Properties props = new Properties();
         String appIdConfig = EnvTools.getEnvValue(EnvTools.APPLICATION_ID_CONFIG, "commander-card-counts-app");
@@ -72,7 +89,9 @@ public class CommanderCardCountsStream {
 
     }
 
-    private static String generateCommanderKey(List<String> commanders) {
-        return commanders.toString();
+    private static String generateCommanderKey(List<String> commanders_uuids) {
+        return commanders_uuids.toString();
     }
+
+
 }
