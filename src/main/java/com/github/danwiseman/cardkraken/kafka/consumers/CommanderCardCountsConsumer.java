@@ -126,8 +126,8 @@ public class CommanderCardCountsConsumer {
 
         try {
             JSONObject commanderCounts = new JSONObject(value);
-            Bson query = eq("_id", commanderCounts.getString("commander_uuid"));
-            commanderCounts.put("_id", commanderCounts.getString("commander_uuid"));
+            Bson query = eq("_id", commanderCounts.getString("stats_id"));
+            commanderCounts.put("_id", commanderCounts.getString("stats_id"));
             UpdateResult insertResult = documents.replaceOne(query, new Document().parse(commanderCounts.toString()), opts);
             log.info("Upserted with id " + insertResult.getUpsertedId());
         } catch (MongoException me) {

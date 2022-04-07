@@ -6,6 +6,7 @@ import com.google.common.collect.Iterables;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CommanderCardsStatsTest {
@@ -21,11 +22,18 @@ public class CommanderCardsStatsTest {
             "1");
     private static final List<CommanderCard> cardList = new ArrayList<CommanderCard>();
 
+    private static final String commander_name = "Bob Belcher";
+    private static final String commander_uuid = "55-aa";
+
 
     @Test
     public void addCards() {
         cardList.add(cardOne);
-        CommanderCardsStats testCards = new CommanderCardsStats("test commander", "test id", cardList);
+        CommanderCardsStats testCards = new CommanderCardsStats(
+                new ArrayList<String>(Arrays.asList(commander_name)),
+                new ArrayList<String>(Arrays.asList(commander_uuid)),
+                commander_uuid,
+                cardList);
 
         assertEquals(1, testCards.getCard_counts().size());
 

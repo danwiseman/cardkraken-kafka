@@ -8,6 +8,7 @@ import java.util.List;
 public class CommanderDeck
 {
     private List<String> commanders;
+    private List<String> commanders_uuids;
     private List<CommanderCard> cards;
     private String deck_id;
     private String game_type;
@@ -17,8 +18,9 @@ public class CommanderDeck
     public CommanderDeck() {
     }
 
-    public CommanderDeck(List<String> commanders, List<CommanderCard> cards, String deck_id, String game_type, String source, String url) {
+    public CommanderDeck(List<String> commanders, List<String> commanders_uuids, List<CommanderCard> cards, String deck_id, String game_type, String source, String url) {
         this.commanders = commanders;
+        this.commanders_uuids = commanders_uuids;
         this.cards = cards;
         this.deck_id = deck_id;
         this.game_type = game_type;
@@ -86,5 +88,13 @@ public class CommanderDeck
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public List<String> getCommanders_uuids() {
+        return commanders_uuids;
+    }
+
+    public void setCommanders_uuids(List<String> commanders_uuids) {
+        this.commanders_uuids = commanders_uuids;
     }
 }

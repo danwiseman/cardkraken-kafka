@@ -6,9 +6,9 @@ import java.util.List;
 
 public class CommanderCardsStats {
 
-    private String commander_name;
-    private String commander_uuid;
-
+    private List<String> commanders;
+    private List<String> commander_uuids;
+    private String stats_id;
     private List<CommanderCard> card_counts;
 
 
@@ -16,27 +16,13 @@ public class CommanderCardsStats {
 
     }
 
-    public CommanderCardsStats(String commander_name, String commander_uuid, List<CommanderCard> card_counts) {
-        this.commander_name = commander_name;
-        this.commander_uuid = commander_uuid;
+    public CommanderCardsStats(List<String> commanders, List<String> commander_uuids, String stats_id, List<CommanderCard> card_counts) {
+        this.commanders = commanders;
+        this.commander_uuids = commander_uuids;
+        this.stats_id = stats_id;
         this.card_counts = card_counts;
     }
 
-    public String getCommander_name() {
-        return commander_name;
-    }
-
-    public void setCommander_name(String commander_name) {
-        this.commander_name = commander_name;
-    }
-
-    public String getCommander_uuid() {
-        return commander_uuid;
-    }
-
-    public void setCommander_uuid(String commander_uuid) {
-        this.commander_uuid = commander_uuid;
-    }
 
     public List<CommanderCard> getCard_counts() {
         return card_counts;
@@ -60,5 +46,29 @@ public class CommanderCardsStats {
             }
         }
 
+    }
+
+    public String getStats_id() {
+        return stats_id;
+    }
+
+    public void setStats_id(String stats_id) {
+        this.stats_id = stats_id;
+    }
+
+    public List<String> getCommanders() {
+        return commanders;
+    }
+
+    public void setCommanders(List<String> commanders) {
+        this.commanders = commanders;
+    }
+
+    public List<String> getCommander_uuids() {
+        return commander_uuids;
+    }
+
+    public void setCommander_uuids(List<String> commander_uuids) {
+        this.commander_uuids = commander_uuids;
     }
 }
