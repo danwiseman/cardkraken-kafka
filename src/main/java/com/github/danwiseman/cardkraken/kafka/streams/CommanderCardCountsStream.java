@@ -39,8 +39,8 @@ public class CommanderCardCountsStream {
 
 
         KTable<String, CommanderCardsStats> commanderCardCounts = commanderDecksInput
-                .selectKey((oldKey, newKey) -> generateCommanderCountUUID(newKey.getCommanders_uuids()))
-                .mapValues((deck) -> new CommanderCardsStats(deck.getCommanders(), deck.getCommanders_uuids(), generateCommanderCountUUID(deck.getCommanders_uuids()), deck.getCards()))
+                .selectKey((oldKey, newKey) -> generateCommanderCountUUID(newKey.getCommanders_uuids(), newKey.getCommanders()))
+                .mapValues((deck) -> new CommanderCardsStats(deck.getCommanders(), deck.getCommanders_uuids(), generateCommanderCountUUID(deck.getCommanders_uuids(), deck.getCommanders()), deck.getCards()))
                 .groupByKey(Grouped.with(Serdes.String(), CustomSerdes.CommanderCardsStats()))
                 .reduce((deck1, deck2) -> {
                     deck1.addCards(deck2.getCard_counts());
@@ -64,10 +64,12 @@ public class CommanderCardCountsStream {
 
     }
 
-    private static String generateCommanderCountUUID(List<String> commanders_uuids) {
+    private static String generateCommanderCountUUID(List<String> commanders_uuids, List<String> commanders) {
         log.error(commanders_uuids.toString());
         if (commanders_uuids.size() == 1) {
-            return commanders_uuids.get(0);
+            return (commanders_uuids.get(0).equals(" ")) ?
+                    UuidCreator.getNameBasedSha1(generateCommanderKey(commanders)).toString()
+                    : commanders_uuids.get(0);
         } else {
             return UuidCreator.getNameBasedSha1(generateCommanderKey(commanders_uuids)).toString();
         }
